@@ -15,13 +15,7 @@ class DefaultFirebaseOptions {
 
   // TODO: Replace these placeholder values with your actual Firebase configuration
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBNsLYlUerkao4KWFrwLiWYH1ATZ4p-f_Y',
-    appId: '1:413850822992:android:731a3bfbf84b56d1bba455',
-    messagingSenderId: '413850822992',
-    projectId: 'family-shopping-list-vtomic85',
-    storageBucket: 'family-shopping-list-vtomic85.firebasestorage.app',
-  );
+  static const FirebaseOptions android = FirebaseOptions(/*...*/);
 
   // Run `flutterfire configure --platforms=android` to generate the correct values
 }
