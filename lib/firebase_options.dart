@@ -14,12 +14,14 @@ class DefaultFirebaseOptions {
   static const FirebaseOptions currentPlatform = android;
 
   // TODO: Replace these placeholder values with your actual Firebase configuration
-  // Run `flutterfire configure --platforms=android` to generate the correct values
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'YOUR_ANDROID_API_KEY',
-    appId: 'YOUR_ANDROID_APP_ID',
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
-    projectId: 'YOUR_PROJECT_ID',
-    storageBucket: 'YOUR_STORAGE_BUCKET',
+    apiKey: 'AIzaSyBNsLYlUerkao4KWFrwLiWYH1ATZ4p-f_Y',
+    appId: '1:413850822992:android:731a3bfbf84b56d1bba455',
+    messagingSenderId: '413850822992',
+    projectId: 'family-shopping-list-vtomic85',
+    storageBucket: 'family-shopping-list-vtomic85.firebasestorage.app',
   );
+
+  // Run `flutterfire configure --platforms=android` to generate the correct values
 }
