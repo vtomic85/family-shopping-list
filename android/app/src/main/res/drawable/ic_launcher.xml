@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Background circle -->
+    <path
+        android:fillColor="#D4896A"
+        android:pathData="M24,24m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0"/>
+    <!-- Shopping basket icon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M16,20 L32,20 L30,32 L18,32 Z
+                         M14,18 L34,18 L34,20 L14,20 Z
+                         M18,14 L21,18 L27,18 L30,14 L28,14 L26,17 L22,17 L20,14 Z
+                         M20,23 L20,29 L22,29 L22,23 Z
+                         M23,23 L23,29 L25,29 L25,23 Z
+                         M26,23 L26,29 L28,29 L28,23 Z"/>
+</vector>
