@@ -1,21 +1,14 @@
-// IMPORTANT: This file is a placeholder.
-// You must generate the actual firebase_options.dart using the FlutterFire CLI:
-//
-// 1. Install FlutterFire CLI: dart pub global activate flutterfire_cli
-// 2. Run: flutterfire configure --platforms=android
-// 3. Select your Firebase project
-// 4. The CLI will generate this file with your actual Firebase configuration
-//
-// For more information, see: https://firebase.google.com/docs/flutter/setup
-
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DefaultFirebaseOptions {
-  static const FirebaseOptions currentPlatform = android;
+  static FirebaseOptions get currentPlatform => android;
 
-  // TODO: Replace these placeholder values with your actual Firebase configuration
-
-  static const FirebaseOptions android = FirebaseOptions(/*...*/);
-
-  // Run `flutterfire configure --platforms=android` to generate the correct values
+  static FirebaseOptions get android => FirebaseOptions(
+    apiKey: dotenv.env['FIREBASE_API_KEY']!,
+    appId: dotenv.env['FIREBASE_APP_ID']!,
+    messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID']!,
+    projectId: dotenv.env['FIREBASE_PROJECT_ID']!,
+    storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET']!,
+  );
 }

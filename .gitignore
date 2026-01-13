@@ -50,10 +50,9 @@ app.*.map.json
 # ios/firebase_app_id_file.json
 # android/app/google-services.json
 
-# Environment files
+# Environment files (keep .env.example for reference)
 .env
-.env.*
-*.env
+!.env.example
 
 # Generated files
 *.g.dart

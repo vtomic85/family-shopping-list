@@ -26,6 +26,9 @@ dependencies:
   
   # Utilities
   intl: ^0.19.0
+  
+  # Environment variables
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -34,6 +37,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  
+  assets:
+    - .env
   
   # To use custom Outfit font, download from Google Fonts and uncomment:
   # fonts:

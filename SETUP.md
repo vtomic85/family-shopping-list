@@ -33,12 +33,29 @@ This guide will help you set up the Family Shopping List Flutter application wit
    flutterfire configure --platforms=android
    ```
    
-   This will:
-   - Create an Android app in your Firebase project
-   - Download `google-services.json`
-   - Generate `lib/firebase_options.dart` with your configuration
+   This will display your Firebase configuration values.
 
-## Step 3: Android Configuration
+## Step 3: Set Up Environment Variables
+
+The app uses environment variables to keep Firebase credentials out of version control.
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` and fill in your Firebase values from Step 2:
+   ```
+   FIREBASE_API_KEY=your_actual_api_key
+   FIREBASE_APP_ID=your_actual_app_id
+   FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   FIREBASE_PROJECT_ID=your_project_id
+   FIREBASE_STORAGE_BUCKET=your_storage_bucket
+   ```
+
+> **Note**: The `.env` file is gitignored and will not be committed. Only `.env.example` is tracked.
+
+## Step 5: Android Configuration
 
 1. Place `google-services.json` in `android/app/`
 
@@ -53,7 +70,7 @@ This guide will help you set up the Family Shopping List Flutter application wit
    ```
    Add the SHA-1 to your Firebase Android app settings (required for Google Sign-In)
 
-## Step 4: Deploy Firestore Security Rules
+## Step 6: Deploy Firestore Security Rules
 
 Deploy the security rules to Firebase:
 
@@ -65,7 +82,7 @@ Or manually copy the contents of `firestore.rules` to the Firebase Console:
 1. Go to Firestore Database → Rules
 2. Paste the rules and publish
 
-## Step 5: Run the App
+## Step 7: Run the App
 
 1. Get dependencies:
    ```bash
