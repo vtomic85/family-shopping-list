@@ -36,8 +36,9 @@ enum ItemStatus {
 class ShoppingItem {
   final String id;
   final String familyGroupId;
-  final String description;
-  final int amount;
+  final String name;
+  final String quantity;
+  final String notes;
   final ItemStatus status;
   final String createdByUid;
   final DateTime createdAt;
@@ -46,8 +47,9 @@ class ShoppingItem {
   const ShoppingItem({
     required this.id,
     required this.familyGroupId,
-    required this.description,
-    required this.amount,
+    required this.name,
+    this.quantity = '1',
+    this.notes = '',
     required this.status,
     required this.createdByUid,
     required this.createdAt,
@@ -59,8 +61,9 @@ class ShoppingItem {
     return ShoppingItem(
       id: doc.id,
       familyGroupId: data['familyGroupId'] ?? '',
-      description: data['description'] ?? '',
-      amount: data['amount'] ?? 1,
+      name: data['name'] ?? data['description'] ?? '', // Support legacy 'description' field
+      quantity: data['quantity']?.toString() ?? data['amount']?.toString() ?? '1', // Support legacy 'amount' field
+      notes: data['notes'] ?? '',
       status: ItemStatus.fromJson(data['status'] ?? 'pending'),
       createdByUid: data['createdByUid'] ?? '',
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
@@ -71,8 +74,9 @@ class ShoppingItem {
   Map<String, dynamic> toFirestore() {
     return {
       'familyGroupId': familyGroupId,
-      'description': description,
-      'amount': amount,
+      'name': name,
+      'quantity': quantity,
+      'notes': notes,
       'status': status.toJson(),
       'createdByUid': createdByUid,
       'createdAt': Timestamp.fromDate(createdAt),
@@ -83,8 +87,9 @@ class ShoppingItem {
   ShoppingItem copyWith({
     String? id,
     String? familyGroupId,
-    String? description,
-    int? amount,
+    String? name,
+    String? quantity,
+    String? notes,
     ItemStatus? status,
     String? createdByUid,
     DateTime? createdAt,
@@ -93,8 +98,9 @@ class ShoppingItem {
     return ShoppingItem(
       id: id ?? this.id,
       familyGroupId: familyGroupId ?? this.familyGroupId,
-      description: description ?? this.description,
-      amount: amount ?? this.amount,
+      name: name ?? this.name,
+      quantity: quantity ?? this.quantity,
+      notes: notes ?? this.notes,
       status: status ?? this.status,
       createdByUid: createdByUid ?? this.createdByUid,
       createdAt: createdAt ?? this.createdAt,
@@ -108,8 +114,9 @@ class ShoppingItem {
     return other is ShoppingItem &&
         other.id == id &&
         other.familyGroupId == familyGroupId &&
-        other.description == description &&
-        other.amount == amount &&
+        other.name == name &&
+        other.quantity == quantity &&
+        other.notes == notes &&
         other.status == status &&
         other.createdByUid == createdByUid;
   }
@@ -119,8 +126,9 @@ class ShoppingItem {
     return Object.hash(
       id,
       familyGroupId,
-      description,
-      amount,
+      name,
+      quantity,
+      notes,
       status,
       createdByUid,
     );
@@ -128,6 +136,6 @@ class ShoppingItem {
 
   @override
   String toString() {
-    return 'ShoppingItem(id: $id, description: $description, amount: $amount, status: ${status.displayName})';
+    return 'ShoppingItem(id: $id, name: $name, quantity: $quantity, notes: $notes, status: ${status.displayName})';
   }
 }

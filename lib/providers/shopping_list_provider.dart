@@ -88,8 +88,9 @@ class ShoppingListProvider extends ChangeNotifier {
 
   /// Add a new item to the shopping list
   Future<bool> addItem({
-    required String description,
-    required int amount,
+    required String name,
+    required String quantity,
+    String notes = '',
     required String userId,
   }) async {
     if (_familyGroup == null) {
@@ -98,14 +99,14 @@ class ShoppingListProvider extends ChangeNotifier {
       return false;
     }
 
-    if (description.trim().isEmpty) {
-      _error = 'Description cannot be empty';
+    if (name.trim().isEmpty) {
+      _error = 'Item name cannot be empty';
       notifyListeners();
       return false;
     }
 
-    if (amount < 1) {
-      _error = 'Amount must be at least 1';
+    if (quantity.trim().isEmpty) {
+      _error = 'Quantity cannot be empty';
       notifyListeners();
       return false;
     }
@@ -114,8 +115,9 @@ class ShoppingListProvider extends ChangeNotifier {
       _error = null;
       await _firestoreService.addItem(
         familyGroupId: _familyGroup!.id,
-        description: description,
-        amount: amount,
+        name: name,
+        quantity: quantity,
+        notes: notes,
         createdByUid: userId,
       );
       return true;
@@ -129,18 +131,19 @@ class ShoppingListProvider extends ChangeNotifier {
   /// Update an existing item
   Future<bool> updateItem({
     required String itemId,
-    String? description,
-    int? amount,
+    String? name,
+    String? quantity,
+    String? notes,
     ItemStatus? status,
   }) async {
-    if (description != null && description.trim().isEmpty) {
-      _error = 'Description cannot be empty';
+    if (name != null && name.trim().isEmpty) {
+      _error = 'Item name cannot be empty';
       notifyListeners();
       return false;
     }
 
-    if (amount != null && amount < 1) {
-      _error = 'Amount must be at least 1';
+    if (quantity != null && quantity.trim().isEmpty) {
+      _error = 'Quantity cannot be empty';
       notifyListeners();
       return false;
     }
@@ -149,8 +152,9 @@ class ShoppingListProvider extends ChangeNotifier {
       _error = null;
       await _firestoreService.updateItem(
         itemId: itemId,
-        description: description,
-        amount: amount,
+        name: name,
+        quantity: quantity,
+        notes: notes,
         status: status,
       );
       return true;

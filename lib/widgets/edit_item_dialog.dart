@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../models/shopping_item.dart';
@@ -20,23 +19,26 @@ class EditItemDialog extends StatefulWidget {
 
 class _EditItemDialogState extends State<EditItemDialog> {
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _descriptionController;
-  late final TextEditingController _amountController;
+  late final TextEditingController _nameController;
+  late final TextEditingController _quantityController;
+  late final TextEditingController _notesController;
   late ItemStatus _selectedStatus;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _descriptionController = TextEditingController(text: widget.item.description);
-    _amountController = TextEditingController(text: widget.item.amount.toString());
+    _nameController = TextEditingController(text: widget.item.name);
+    _quantityController = TextEditingController(text: widget.item.quantity);
+    _notesController = TextEditingController(text: widget.item.notes);
     _selectedStatus = widget.item.status;
   }
 
   @override
   void dispose() {
-    _descriptionController.dispose();
-    _amountController.dispose();
+    _nameController.dispose();
+    _quantityController.dispose();
+    _notesController.dispose();
     super.dispose();
   }
 
@@ -51,119 +53,127 @@ class _EditItemDialogState extends State<EditItemDialog> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Handle
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).dividerColor,
-                      borderRadius: BorderRadius.circular(2),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Handle
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).dividerColor,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                
-                // Title
-                Text(
-                  'Edit Item',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                const SizedBox(height: 24),
-                
-                // Description field
-                TextFormField(
-                  controller: _descriptionController,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: const InputDecoration(
-                    labelText: 'Description',
-                    prefixIcon: Icon(Icons.shopping_bag_outlined),
+                  const SizedBox(height: 20),
+                  
+                  // Title
+                  Text(
+                    'Edit Item',
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a description';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                
-                // Amount field
-                TextFormField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                  decoration: const InputDecoration(
-                    labelText: 'Amount',
-                    prefixIcon: Icon(Icons.numbers_rounded),
+                  const SizedBox(height: 24),
+                  
+                  // Name field
+                  TextFormField(
+                    controller: _nameController,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: const InputDecoration(
+                      labelText: 'Item Name',
+                      prefixIcon: Icon(Icons.shopping_bag_outlined),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Please enter an item name';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter an amount';
-                    }
-                    final amount = int.tryParse(value);
-                    if (amount == null || amount < 1) {
-                      return 'Amount must be at least 1';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                
-                // Status selector
-                Text(
-                  'Status',
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                const SizedBox(height: 8),
-                _buildStatusSelector(),
-                const SizedBox(height: 24),
-                
-                // Buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                  const SizedBox(height: 16),
+                  
+                  // Quantity field
+                  TextFormField(
+                    controller: _quantityController,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: const InputDecoration(
+                      labelText: 'Quantity',
+                      prefixIcon: Icon(Icons.numbers_rounded),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Please enter a quantity';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Notes field
+                  TextFormField(
+                    controller: _notesController,
+                    textCapitalization: TextCapitalization.sentences,
+                    maxLines: 2,
+                    decoration: const InputDecoration(
+                      labelText: 'Notes (optional)',
+                      prefixIcon: Icon(Icons.note_outlined),
+                      alignLabelWithHint: true,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Status selector
+                  Text(
+                    'Status',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  _buildStatusSelector(),
+                  const SizedBox(height: 24),
+                  
+                  // Buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
+                          child: const Text('Cancel'),
                         ),
-                        child: const Text('Cancel'),
                       ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      flex: 2,
-                      child: ElevatedButton(
-                        onPressed: _isLoading ? null : _submit,
-                        child: _isLoading
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const Text('Save Changes'),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        flex: 2,
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _submit,
+                          child: _isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Text('Save Changes'),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -247,8 +257,9 @@ class _EditItemDialogState extends State<EditItemDialog> {
 
     final success = await shoppingProvider.updateItem(
       itemId: widget.item.id,
-      description: _descriptionController.text.trim(),
-      amount: int.parse(_amountController.text),
+      name: _nameController.text.trim(),
+      quantity: _quantityController.text.trim(),
+      notes: _notesController.text.trim(),
       status: _selectedStatus,
     );
 
@@ -260,11 +271,12 @@ class _EditItemDialogState extends State<EditItemDialog> {
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Item updated'),
+          content: const Text('Item updated successfully'),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
+          duration: const Duration(seconds: 2),
         ),
       );
     } else {
@@ -276,6 +288,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
+          duration: const Duration(seconds: 3),
         ),
       );
     }

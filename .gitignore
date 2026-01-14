@@ -52,7 +52,6 @@ app.*.map.json
 
 # Environment files (keep .env.example for reference)
 .env
-!.env.example
 
 # Generated files
 *.g.dart

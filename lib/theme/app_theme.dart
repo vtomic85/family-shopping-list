@@ -39,7 +39,7 @@ class AppTheme {
         onSurface: _textPrimaryLight,
       ),
       scaffoldBackgroundColor: _backgroundLight,
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: _backgroundLight,
         foregroundColor: _textPrimaryLight,
         elevation: 0,
@@ -87,7 +87,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontFamily: _fontFamily,
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -97,7 +97,7 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: _primaryLight,
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontFamily: _fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.w500,
@@ -106,7 +106,7 @@ class AppTheme {
       ),
       chipTheme: ChipThemeData(
         backgroundColor: Colors.grey.shade100,
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           fontFamily: _fontFamily,
           fontSize: 12,
           fontWeight: FontWeight.w500,
@@ -116,7 +116,7 @@ class AppTheme {
         ),
         side: BorderSide.none,
       ),
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
         headlineLarge: TextStyle(
           fontFamily: _fontFamily,
           fontSize: 32,
@@ -176,7 +176,7 @@ class AppTheme {
         onSurface: _textPrimaryDark,
       ),
       scaffoldBackgroundColor: _backgroundDark,
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: _backgroundDark,
         foregroundColor: _textPrimaryDark,
         elevation: 0,
@@ -224,7 +224,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontFamily: _fontFamily,
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -234,7 +234,7 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: _primaryDark,
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontFamily: _fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.w500,
@@ -243,7 +243,7 @@ class AppTheme {
       ),
       chipTheme: ChipThemeData(
         backgroundColor: Colors.grey.shade800,
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           fontFamily: _fontFamily,
           fontSize: 12,
           fontWeight: FontWeight.w500,
@@ -253,7 +253,7 @@ class AppTheme {
         ),
         side: BorderSide.none,
       ),
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
         headlineLarge: TextStyle(
           fontFamily: _fontFamily,
           fontSize: 32,

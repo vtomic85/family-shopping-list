@@ -69,7 +69,8 @@ class ShoppingItemTile extends StatelessWidget {
         child: InkWell(
           onTap: () => _cycleStatus(context),
           borderRadius: BorderRadius.circular(16),
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF2A2A2A) : Colors.white,
               borderRadius: BorderRadius.circular(16),
@@ -99,7 +100,7 @@ class ShoppingItemTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.description,
+                          item.name,
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             decoration: item.status == ItemStatus.bought
                                 ? TextDecoration.lineThrough
@@ -114,7 +115,7 @@ class ShoppingItemTile extends StatelessWidget {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            // Amount badge
+                            // Quantity badge
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
@@ -131,13 +132,13 @@ class ShoppingItemTile extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(
-                                    Icons.numbers_rounded,
+                                    Icons.shopping_basket_outlined,
                                     size: 12,
                                     color: Theme.of(context).colorScheme.primary,
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    '${item.amount}',
+                                    item.quantity,
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
@@ -152,6 +153,30 @@ class ShoppingItemTile extends StatelessWidget {
                             _buildStatusChip(context),
                           ],
                         ),
+                        // Notes (if present)
+                        if (item.notes.isNotEmpty) ...[
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.note_outlined,
+                                size: 12,
+                                color: Theme.of(context).textTheme.bodySmall?.color,
+                              ),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  item.notes,
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -172,7 +197,8 @@ class ShoppingItemTile extends StatelessWidget {
   }
 
   Widget _buildStatusIndicator(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
       width: 48,
       height: 48,
       decoration: BoxDecoration(
@@ -206,7 +232,27 @@ class ShoppingItemTile extends StatelessWidget {
   }
 
   void _cycleStatus(BuildContext context) {
-    context.read<ShoppingListProvider>().cycleItemStatus(item.id);
+    final provider = context.read<ShoppingListProvider>();
+    provider.cycleItemStatus(item.id);
+    
+    // Show feedback snackbar
+    final newStatus = switch (item.status) {
+      ItemStatus.pending => ItemStatus.bought,
+      ItemStatus.bought => ItemStatus.notAvailable,
+      ItemStatus.notAvailable => ItemStatus.pending,
+    };
+    
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Marked as ${newStatus.displayName}'),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(milliseconds: 1500),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
   }
 
   void _showEditDialog(BuildContext context) {
@@ -223,7 +269,7 @@ class ShoppingItemTile extends StatelessWidget {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Delete Item'),
-        content: Text('Are you sure you want to delete "${item.description}"?'),
+        content: Text('Are you sure you want to delete "${item.name}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
@@ -235,11 +281,12 @@ class ShoppingItemTile extends StatelessWidget {
               context.read<ShoppingListProvider>().deleteItem(item.id);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Deleted "${item.description}"'),
+                  content: Text('Deleted "${item.name}"'),
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  duration: const Duration(seconds: 2),
                 ),
               );
             },

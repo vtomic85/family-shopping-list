@@ -7,6 +7,7 @@ import '../../providers/family_group_provider.dart';
 import '../../providers/shopping_list_provider.dart';
 import '../../widgets/shopping_item_tile.dart';
 import '../../widgets/add_item_dialog.dart';
+import '../../widgets/loading_skeleton.dart';
 import '../settings/members_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -145,8 +146,8 @@ class HomeScreen extends StatelessWidget {
     return Consumer2<ShoppingListProvider, FamilyGroupProvider>(
       builder: (context, shoppingProvider, familyProvider, _) {
         if (familyProvider.isLoading || shoppingProvider.isLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return const SingleChildScrollView(
+            child: LoadingSkeleton(),
           );
         }
 
@@ -233,36 +234,55 @@ class HomeScreen extends StatelessWidget {
     final boughtItems = provider.boughtItems;
     final notAvailableItems = provider.notAvailableItems;
 
-    return CustomScrollView(
-      slivers: [
-        // Statistics header
-        SliverToBoxAdapter(
-          child: _buildStatsHeader(context, provider),
-        ),
-        
-        // Pending items
-        if (pendingItems.isNotEmpty) ...[
-          _buildSectionHeader(context, 'To Buy', pendingItems.length, ItemStatus.pending),
-          _buildItemsSliver(context, pendingItems),
+    return RefreshIndicator(
+      onRefresh: () async {
+        // The stream already handles real-time updates,
+        // but we can show a brief feedback to the user
+        await Future.delayed(const Duration(milliseconds: 500));
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('List refreshed'),
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(milliseconds: 1500),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          );
+        }
+      },
+      child: CustomScrollView(
+        slivers: [
+          // Statistics header
+          SliverToBoxAdapter(
+            child: _buildStatsHeader(context, provider),
+          ),
+          
+          // Pending items
+          if (pendingItems.isNotEmpty) ...[
+            _buildSectionHeader(context, 'To Buy', pendingItems.length, ItemStatus.pending),
+            _buildItemsSliver(context, pendingItems),
+          ],
+          
+          // Bought items
+          if (boughtItems.isNotEmpty) ...[
+            _buildSectionHeader(context, 'Bought', boughtItems.length, ItemStatus.bought),
+            _buildItemsSliver(context, boughtItems),
+          ],
+          
+          // Not available items
+          if (notAvailableItems.isNotEmpty) ...[
+            _buildSectionHeader(context, 'Not Available', notAvailableItems.length, ItemStatus.notAvailable),
+            _buildItemsSliver(context, notAvailableItems),
+          ],
+          
+          // Bottom padding
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 100),
+          ),
         ],
-        
-        // Bought items
-        if (boughtItems.isNotEmpty) ...[
-          _buildSectionHeader(context, 'Bought', boughtItems.length, ItemStatus.bought),
-          _buildItemsSliver(context, boughtItems),
-        ],
-        
-        // Not available items
-        if (notAvailableItems.isNotEmpty) ...[
-          _buildSectionHeader(context, 'Not Available', notAvailableItems.length, ItemStatus.notAvailable),
-          _buildItemsSliver(context, notAvailableItems),
-        ],
-        
-        // Bottom padding
-        const SliverToBoxAdapter(
-          child: SizedBox(height: 100),
-        ),
-      ],
+      ),
     );
   }
 

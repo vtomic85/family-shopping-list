@@ -108,16 +108,18 @@ class FirestoreService {
   /// Add a new shopping item
   Future<ShoppingItem> addItem({
     required String familyGroupId,
-    required String description,
-    required int amount,
+    required String name,
+    required String quantity,
+    String notes = '',
     required String createdByUid,
   }) async {
     final now = DateTime.now();
     final item = ShoppingItem(
       id: '', // Will be set by Firestore
       familyGroupId: familyGroupId,
-      description: description.trim(),
-      amount: amount,
+      name: name.trim(),
+      quantity: quantity.trim(),
+      notes: notes.trim(),
       status: ItemStatus.pending,
       createdByUid: createdByUid,
       createdAt: now,
@@ -131,19 +133,23 @@ class FirestoreService {
   /// Update an existing shopping item
   Future<void> updateItem({
     required String itemId,
-    String? description,
-    int? amount,
+    String? name,
+    String? quantity,
+    String? notes,
     ItemStatus? status,
   }) async {
     final updates = <String, dynamic>{
       'modifiedAt': Timestamp.fromDate(DateTime.now()),
     };
 
-    if (description != null) {
-      updates['description'] = description.trim();
+    if (name != null) {
+      updates['name'] = name.trim();
     }
-    if (amount != null) {
-      updates['amount'] = amount;
+    if (quantity != null) {
+      updates['quantity'] = quantity.trim();
+    }
+    if (notes != null) {
+      updates['notes'] = notes.trim();
     }
     if (status != null) {
       updates['status'] = status.toJson();
