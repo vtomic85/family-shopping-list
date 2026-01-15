@@ -423,10 +423,9 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildFAB(BuildContext context) {
-    return FloatingActionButton.extended(
+    return FloatingActionButton(
       onPressed: () => _showAddItemDialog(context),
-      icon: const Icon(Icons.add_rounded),
-      label: const Text('Add Item'),
+      child: const Icon(Icons.add_rounded),
     );
   }
 

@@ -177,21 +177,26 @@ class ShoppingItemTile extends StatelessWidget {
                             ],
                           ),
                         ],
-                      ],
-                    ),
+                    ],
                   ),
-                  
-                  // Swipe hint icon
-                  Icon(
-                    Icons.chevron_left_rounded,
-                    color: Theme.of(context).dividerColor,
-                    size: 20,
+                ),
+                
+                // Delete icon button
+                IconButton(
+                  onPressed: () => _confirmDelete(context),
+                  icon: Icon(
+                    Icons.delete_outline_rounded,
+                    color: Theme.of(context).colorScheme.error,
                   ),
-                ],
-              ),
+                  tooltip: 'Delete item',
+                  padding: const EdgeInsets.all(8),
+                  constraints: const BoxConstraints(),
+                ),
+              ],
             ),
           ),
         ),
+      ),
       ),
     );
   }
